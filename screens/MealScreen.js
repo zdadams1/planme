@@ -9,6 +9,10 @@ import {
   AsyncStorage,
   ActivityIndicator,
 } from "react-native";
+import Input from "../components/profile/Input";
+import List from "../components/profile/list";
+import { ScrollView } from "react-native-gesture-handler";
+import uuid from "uuid/v1";
 
 export default class MealScreen extends Component {
   state = {
@@ -42,7 +46,7 @@ export default class MealScreen extends Component {
   };
   loadingItems = async () => {
     try {
-      const allItems = await AsyncStorage.getItem("ToDos");
+      const allItems = await AsyncStorage.getItem("Grocery");
       this.setState({
         loadingItems: true,
         allItems: JSON.parse(allItems) || {},
@@ -123,14 +127,14 @@ export default class MealScreen extends Component {
   };
   deleteAllItems = async () => {
     try {
-      await AsyncStorage.removeItem("ToDos");
+      await AsyncStorage.removeItem("Grocery");
       this.setState({ allItems: {} });
     } catch (err) {
       console.log(err);
     }
   };
   saveItems = (newItem) => {
-    const saveItem = AsyncStorage.setItem("ToDos", JSON.stringify(newItem));
+    const saveItem = AsyncStorage.setItem("Grocery", JSON.stringify(newItem));
   };
   render() {
     const {
@@ -143,156 +147,36 @@ export default class MealScreen extends Component {
       allItems,
     } = this.state;
 
-    // 18 and younger
-    if (age <= 18 && gender == "male" && height <= 72 && weight <= 170) {
+    let calories;
+
+    const BMRMen = 66 + 6.23 * weight + 12.7 * height - 6.8 * age;
+    const BMRWomen = 655 + 4.35 * weight + 4.7 * height - 4.7 * age;
+    const menCalories = BMRMen * 1.55;
+    const womenCalories = BMRWomen * 1.55;
+    if (gender == "male") {
+      calories = menCalories;
+    } else {
+      calories = womenCalories;
     }
 
-    if (age <= 18 && gender == "female" && height <= 72 && weight <= 170) {
-    }
-
-    if (age <= 18 && gender == "male" && height > 72 && weight > 170) {
-    }
-
-    if (age <= 18 && gender == "female" && height > 72 && weight > 170) {
-    }
-
-    // 19 and 36
-    if (
-      age > 18 &&
-      age <= 36 &&
-      gender == "female" &&
-      height <= 72 &&
-      weight <= 170
-    ) {
-    }
-
-    if (
-      age > 18 &&
-      age <= 36 &&
-      gender == "male" &&
-      height <= 72 &&
-      weight <= 170
-    ) {
-    }
-
-    if (
-      age > 18 &&
-      age <= 36 &&
-      gender == "female" &&
-      height > 72 &&
-      weight > 170
-    ) {
-    }
-
-    if (
-      age > 18 &&
-      age <= 36 &&
-      gender == "male" &&
-      height > 72 &&
-      weight > 170
-    ) {
-    }
-
-    // 37 and 55
-    if (
-      age > 36 &&
-      age <= 55 &&
-      gender == "female" &&
-      height <= 72 &&
-      weight <= 170
-    ) {
-    }
-
-    if (
-      age > 36 &&
-      age <= 55 &&
-      gender == "male" &&
-      height <= 72 &&
-      weight <= 170
-    ) {
-    }
-
-    if (
-      age > 36 &&
-      age <= 55 &&
-      gender == "female" &&
-      height > 72 &&
-      weight > 170
-    ) {
-    }
-
-    if (
-      age > 36 &&
-      age <= 55 &&
-      gender == "male" &&
-      height > 72 &&
-      weight > 170
-    ) {
-    }
-
-    // 56 and 70
-    if (
-      age > 55 &&
-      age <= 70 &&
-      gender == "female" &&
-      height <= 72 &&
-      weight <= 170
-    ) {
-    }
-
-    if (
-      age > 55 &&
-      age <= 70 &&
-      gender == "male" &&
-      height <= 72 &&
-      weight <= 170
-    ) {
-    }
-
-    if (
-      age > 55 &&
-      age <= 70 &&
-      gender == "female" &&
-      height > 72 &&
-      weight > 170
-    ) {
-    }
-
-    if (
-      age > 55 &&
-      age <= 70 &&
-      gender == "male" &&
-      height > 72 &&
-      weight > 170
-    ) {
-    }
-
-    // 70 and 90
-    if (age > 70 && gender == "female" && height <= 72 && weight <= 170) {
-    }
-
-    if (age > 70 && gender == "male" && height <= 72 && weight <= 170) {
-    }
-
-    if (age > 70 && gender == "female" && height > 72 && weight > 170) {
-    }
-
-    if (age > 70 && gender == "male" && height > 72 && weight > 170) {
-    }
+    const divcalories = calories / 6;
 
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Meal Plan</Text>
         <View style={styles.mealcontent}>
           <Text style={styles.mealheader}>Your personalized diet</Text>
-          <Text style={styles.calories}>Daily calory count: {calories}</Text>
+          <Text style={styles.calories}>
+            Daily calory count: {calories.toPrecision(6)}
+          </Text>
           <Text style={styles.divcalories}>
             To maintain the healthiest diet, it is suggested that you eat{" "}
-            {divcalories} 6 times a day evenly spaced out.
+            {divcalories.toPrecision(5)} 6 times a day evenly spaced out.
           </Text>
         </View>
         <View style={styles.groclist}>
-          <TextInput
+          <Input
+            placeholder="Add Grocery Item"
             inputValue={inputValue}
             onChangeText={this.newInputValue}
             onDoneAddItem={this.onDoneAddItem}
@@ -323,5 +207,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+  },
+  title: {
+    color: "orange",
+    textAlign: "center",
+    fontSize: 30,
+  },
+  mealcontent: {
+    textAlign: "center",
+    marginLeft: 15,
+  },
+  mealheader: {
+    fontSize: 20,
+    textAlign: "center",
+    marginRight: 20,
+    marginBottom: 5,
+  },
+  calories: {
+    fontSize: 15,
+    marginLeft: 60,
+    marginBottom: 10,
+  },
+  divcalories: {
+    fontSize: 15,
+    marginLeft: -5,
+  },
+  groclist: {
+    marginLeft: 25,
   },
 });

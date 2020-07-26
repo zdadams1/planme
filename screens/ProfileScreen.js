@@ -40,8 +40,9 @@ export default class ProfileScreen extends React.Component {
     this.setState({ age: value });
   };
   setGender = (value) => {
-    AsyncStorage.setItem("gender", value);
-    this.setState({ gender: value });
+    const lowerValue = value.toLowerCase();
+    AsyncStorage.setItem("gender", lowerValue);
+    this.setState({ gender: lowerValue });
   };
   setHeight = (value) => {
     AsyncStorage.setItem("height", value);
@@ -70,18 +71,18 @@ export default class ProfileScreen extends React.Component {
           style={styles.textInput}
           autoCapitalize="none"
           onChangeText={this.setHeight}
-          placeholder="Height"
+          placeholder="Height(inches)"
         />
         <TextInput
           style={styles.textInput}
           autoCapitalize="none"
           onChangeText={this.setWeight}
-          placeholder="Weight"
+          placeholder="Weight(pounds)"
         />
-        <Text>{this.state.age}</Text>
-        <Text>{this.state.height}</Text>
-        <Text>{this.state.weight}</Text>
-        <Text>{this.state.gender}</Text>
+        <Text style={styles.items}>Age: {this.state.age}</Text>
+        <Text style={styles.items}>Height: {this.state.height}</Text>
+        <Text style={styles.items}>Weight: {this.state.weight}</Text>
+        <Text style={styles.items}>Gender: {this.state.gender}</Text>
       </View>
     );
   }
@@ -98,90 +99,10 @@ const styles = StyleSheet.create({
   },
   textInput: {
     margin: 5,
-    height: 100,
-    borderWidth: 1,
-    backgroundColor: "#7685ed",
+    height: 75,
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: "rgba(0,0,25,0.4)",
-    fontSize: 14,
-    lineHeight: 19,
+  items: {
     textAlign: "center",
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: "center",
     marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: "contain",
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: "center",
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: "rgba(96,100,109, 0.8)",
-  },
-  codeHighlightContainer: {
-    backgroundColor: "rgba(0,0,0,0.05)",
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    lineHeight: 24,
-    textAlign: "center",
-  },
-  tabBarInfoContainer: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: "black",
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: "center",
-    backgroundColor: "#fbfbfb",
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: "rgba(96,100,109, 1)",
-    textAlign: "center",
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: "center",
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: "#2e78b7",
   },
 });
