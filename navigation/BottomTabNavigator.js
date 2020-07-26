@@ -1,13 +1,15 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as React from 'react';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as React from "react";
 
-import TabBarIcon from '../components/TabBarIcon';
-import TodosScreen from '../screens/TodosScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import BudgeterScreen from '../screens/BudgeterScreen';
+import TabBarIcon from "../components/TabBarIcon";
+import TodosScreen from "../screens/TodosScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import BudgeterScreen from "../screens/BudgeterScreen";
+import ExcersizeScreen from "../screens/ExcersizeScreen";
+import MealScreen from "../screens/MealScreen";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Todos';
+const INITIAL_ROUTE_NAME = "Todos";
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -18,33 +20,52 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <BottomTab.Screen
-        name='Todos'
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-person" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Todos"
         component={TodosScreen}
         options={{
           title: "Todo's",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-list' />
+            <TabBarIcon focused={focused} name="md-list" />
           ),
         }}
       />
       <BottomTab.Screen
-        name='Budgeter'
+        name="Budgeter"
         component={BudgeterScreen}
         options={{
-          title: 'Budgeter',
+          title: "Budgeter",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-cash' />
+            <TabBarIcon focused={focused} name="md-cash" />
           ),
         }}
       />
-
       <BottomTab.Screen
-        name='Profile'
-        component={ProfileScreen}
+        name="Meal"
+        component={MealScreen}
         options={{
-          title: 'Profile',
+          title: "Meal",
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-person' />
+            <TabBarIcon focused={focused} name="md-pizza" />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name="Excersize"
+        component={ExcersizeScreen}
+        options={{
+          title: "Excersize",
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name="md-fitness" />
           ),
         }}
       />
@@ -57,11 +78,15 @@ function getHeaderTitle(route) {
     route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 
   switch (routeName) {
-    case 'Todos':
-      return 'PlanMe';
-    case 'Budgeter':
-      return 'PlanMe';
-    case 'Profile':
-      return 'PlanMe';
+    case "Todos":
+      return "PlanMe";
+    case "Budgeter":
+      return "PlanMe";
+    case "Profile":
+      return "PlanMe";
+    case "Excersize":
+      return "PlanMe";
+    case "Meal":
+      return "PlanMe";
   }
 }

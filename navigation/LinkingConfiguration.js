@@ -1,14 +1,16 @@
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
 
 export default {
-  prefixes: [Linking.makeUrl('/')],
+  prefixes: [Linking.makeUrl("/")],
   config: {
     Root: {
-      path: 'root',
+      path: "root",
       screens: {
-        Todos: 'todos',
-        Budgeter: 'budgeter',
-        Profile: 'profile',
+        Todos: "todos",
+        Budgeter: "budgeter",
+        Profile: "profile",
+        Meal: "meal",
+        Excersize: "excersize",
       },
     },
   },
